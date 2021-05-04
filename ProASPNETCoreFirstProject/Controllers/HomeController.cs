@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using ProASPNETCoreFirstProject.Models;
+using System;
+
 namespace ProASPNETCoreFirstProject.Controllers
 {
     public class HomeController : Controller
     {
-        public string Index()
+        public ViewResult Index()
         {
-            return "Hello world";
+            var hour = DateTime.Now.Hour;
+            var viewModel = hour < 12 ? "Good Morning" : "Good Afternoon";
+
+            return View("MyView", viewModel);
         }
     }
 }
