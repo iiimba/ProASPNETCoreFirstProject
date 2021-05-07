@@ -13,9 +13,9 @@ namespace SportsStore.Controllers
             this.storeRepository = storeRepository;
         }
 
-        public async Task<ViewResult> Index()
+        public async Task<ViewResult> Index(int productPage = 1)
         {
-            var products = await storeRepository.GetProductsAsync();
+            var products = await storeRepository.GetProductsAsync(productPage);
 
             return View(products);
         }

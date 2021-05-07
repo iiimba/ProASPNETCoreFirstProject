@@ -4,6 +4,6 @@ namespace SportsStore.Models
 {
     public interface IStoreRepository
     {
-        Task<Product[]> GetProductsAsync();
+        Task<Product[]> GetProductsAsync(int page = 1);
     }
 }
