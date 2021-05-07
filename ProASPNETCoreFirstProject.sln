@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProASPNETCoreFirstProject", "ProASPNETCoreFirstProject\ProASPNETCoreFirstProject.csproj", "{1573D21A-08DA-45F6-B74B-8E11F526872E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProASPNETCoreFirstProject", "ProASPNETCoreFirstProject\ProASPNETCoreFirstProject.csproj", "{1573D21A-08DA-45F6-B74B-8E11F526872E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleApp.Tests", "SimpleApp.Tests\SimpleApp.Tests.csproj", "{4977AAC3-594A-4EB5-BB5D-DB6025DD29E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{1573D21A-08DA-45F6-B74B-8E11F526872E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1573D21A-08DA-45F6-B74B-8E11F526872E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1573D21A-08DA-45F6-B74B-8E11F526872E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4977AAC3-594A-4EB5-BB5D-DB6025DD29E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4977AAC3-594A-4EB5-BB5D-DB6025DD29E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4977AAC3-594A-4EB5-BB5D-DB6025DD29E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4977AAC3-594A-4EB5-BB5D-DB6025DD29E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
