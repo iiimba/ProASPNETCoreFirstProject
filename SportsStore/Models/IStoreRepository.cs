@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace SportsStore.Models
 {
     public interface IStoreRepository
     {
-        Task<Product[]> GetProductsAsync(int page = 1);
+        IQueryable<Product> Products { get; }
     }
 }

@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SportsStore.Models;
-using System.Threading.Tasks;
+using SportsStore.Models.ViewModels;
+using System.Linq;
 
 namespace SportsStore.Controllers
 {
     public class HomeController : Controller
     {
+        public int PageSize = 4;
+
         private readonly IStoreRepository storeRepository;
 
         public HomeController(IStoreRepository storeRepository)
@@ -13,11 +16,23 @@ namespace SportsStore.Controllers
             this.storeRepository = storeRepository;
         }
 
-        public async Task<ViewResult> Index(int productPage = 1)
+        public ViewResult Index(int productPage = 1)
         {
-            var products = await storeRepository.GetProductsAsync(productPage);
+            var productsViewModel = new ProductsListViewModel
+            {
+                Products = storeRepository.Products
+                    .OrderBy(p => p.ProductID)
+                    .Skip((productPage - 1) * PageSize)
+                    .Take(PageSize),
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = productPage,
+                    ItemsPerPage = PageSize,
+                    TotalItems = storeRepository.Products.Count()
+                }
+            };
 
-            return View(products);
+            return View(productsViewModel);
         }
     }
 }
