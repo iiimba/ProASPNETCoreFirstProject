@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProASPNETCoreFirstProject",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleApp.Tests", "SimpleApp.Tests\SimpleApp.Tests.csproj", "{4977AAC3-594A-4EB5-BB5D-DB6025DD29E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsStore", "SportsStore\SportsStore.csproj", "{0F50DD1F-6891-46A7-BA52-B0305B3231E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsStore", "SportsStore\SportsStore.csproj", "{0F50DD1F-6891-46A7-BA52-B0305B3231E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsStore.Tests", "SportsStore.Tests\SportsStore.Tests.csproj", "{0DEDD8FE-52AD-4E1C-90C5-9D22B9414113}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsStore.Tests", "SportsStore.Tests\SportsStore.Tests.csproj", "{0DEDD8FE-52AD-4E1C-90C5-9D22B9414113}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
