@@ -12,6 +12,10 @@ namespace Platform
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<MessageOptions>(options =>
+            {
+                options.CityName = "Albany";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -21,6 +25,19 @@ namespace Platform
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.Map("/branch", branch =>
+            {
+                branch.UseMiddleware<QueryStringMiddleWare>();
+                branch.Run(async (context) =>
+                {
+                    await context.Response.WriteAsync($"Branch Middleware");
+                });
+            });
+
+            app.UseMiddleware<LocationMiddleware>();
+
+            app.UseMiddleware<QueryStringMiddleWare>();
 
             app.UseRouting();
 
