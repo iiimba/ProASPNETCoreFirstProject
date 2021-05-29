@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsStore", "SportsStore\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsStore.Tests", "SportsStore.Tests\SportsStore.Tests.csproj", "{0DEDD8FE-52AD-4E1C-90C5-9D22B9414113}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Platform", "Platform\Platform.csproj", "{C38B655D-61CF-4F7C-B4AD-C5EC8CB8E5E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platform", "Platform\Platform.csproj", "{C38B655D-61CF-4F7C-B4AD-C5EC8CB8E5E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{BE360C64-C3D8-4D37-8CB1-D48F957D8B15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{C38B655D-61CF-4F7C-B4AD-C5EC8CB8E5E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C38B655D-61CF-4F7C-B4AD-C5EC8CB8E5E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C38B655D-61CF-4F7C-B4AD-C5EC8CB8E5E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE360C64-C3D8-4D37-8CB1-D48F957D8B15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE360C64-C3D8-4D37-8CB1-D48F957D8B15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE360C64-C3D8-4D37-8CB1-D48F957D8B15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE360C64-C3D8-4D37-8CB1-D48F957D8B15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
