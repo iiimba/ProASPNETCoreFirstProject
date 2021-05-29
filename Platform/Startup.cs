@@ -3,11 +3,14 @@ using Microsoft.AspNetCore.HostFiltering;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Platform.Models;
+using Platform.Services;
 using System;
 using System.Threading.Tasks;
 
@@ -15,87 +18,60 @@ namespace Platform
 {
     public class Startup
     {
+        private IConfiguration Configuration { get; set; }
+
         public Startup(IConfiguration configService)
         {
             Configuration = configService;
         }
-        private IConfiguration Configuration { get; set; }
-
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(opts =>
+            services.AddDistributedSqlServerCache(opts =>
             {
-                opts.CheckConsentNeeded = context => true;
+                opts.ConnectionString = Configuration["ConnectionStrings:CacheConnection"];
+                opts.SchemaName = "dbo";
+                opts.TableName = "DataCache";
             });
+            services.AddResponseCaching();
+            services.AddSingleton<IResponseFormatter, HtmlResponseFormatter>();
 
-            services.AddDistributedMemoryCache();
-
-            services.AddSession(options =>
+            services.AddDbContext<CalculationContext>(opts =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-                options.Cookie.IsEssential = true;
+                opts.UseSqlServer(Configuration["ConnectionStrings:CalcConnection"]);
+                opts.EnableSensitiveDataLogging(true);
             });
 
-            services.AddHsts(opts => {
-                opts.MaxAge = TimeSpan.FromDays(1);
-                opts.IncludeSubDomains = true;
-            });
-
-            services.Configure<HostFilteringOptions>(opts => {
-                opts.AllowedHosts.Clear();
-                opts.AllowedHosts.Add("*.example.com");
-            });
+            services.AddTransient<SeedData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime, SeedData seedData)
         {
-            app.UseExceptionHandler("/error.html");
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseHsts();
-            }
-            app.UseHttpsRedirection();
-            app.UseStatusCodePages("text/html", Responses.DefaultResponse);
-            app.UseCookiePolicy();
+            app.UseDeveloperExceptionPage();
+            app.UseResponseCaching();
             app.UseStaticFiles();
-            app.UseMiddleware<ConsentMiddleware>();
-            app.UseSession();
             app.UseRouting();
 
-            app.Use(async (context, next) =>
-            {
-                if (context.Request.Path == "/error")
-                {
-                    context.Response.StatusCode = StatusCodes.Status404NotFound;
-                    //await Task.CompletedTask;
-                }
-                else
-                {
-                    await next();
-                }
-            });
+            app.UseEndpoints(endpoints => {
+                endpoints.MapEndpoint<SumEndpoint>("/sum/{count:int=1000000000}");
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapFallback(async context =>
-                {
-                    await context.Response.WriteAsync("Routed to fallback endpoint");
+                endpoints.MapGet("/", async context => {
+                    await context.Response.WriteAsync("Hello World!");
                 });
             });
 
-
-            //app.Run(context => {
-            //    throw new Exception("Something has gone wrong");
-            //});
+            bool cmdLineInit = (Configuration["INITDB"] ?? "false") == "true";
+            if (env.IsDevelopment() || cmdLineInit)
+            {
+                seedData.SeedDatabase();
+                if (cmdLineInit)
+                {
+                    lifetime.StopApplication();
+                }
+            }
         }
     }
 }
