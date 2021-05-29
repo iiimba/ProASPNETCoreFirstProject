@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HostFiltering;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -7,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace Platform
 {
@@ -23,43 +26,76 @@ namespace Platform
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<MessageOptions>(Configuration.GetSection("Location"));
+            services.Configure<CookiePolicyOptions>(opts =>
+            {
+                opts.CheckConsentNeeded = context => true;
+            });
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.IsEssential = true;
+            });
+
+            services.AddHsts(opts => {
+                opts.MaxAge = TimeSpan.FromDays(1);
+                opts.IncludeSubDomains = true;
+            });
+
+            services.Configure<HostFilteringOptions>(opts => {
+                opts.AllowedHosts.Clear();
+                opts.AllowedHosts.Add("*.example.com");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            app.UseExceptionHandler("/error.html");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions
+            else
             {
-                FileProvider = new PhysicalFileProvider($"{env.ContentRootPath}/staticfiles"),
-                RequestPath = "/files"
-            });
-
+                app.UseHsts();
+            }
+            app.UseHttpsRedirection();
+            app.UseStatusCodePages("text/html", Responses.DefaultResponse);
+            app.UseCookiePolicy();
+            app.UseStaticFiles();
+            app.UseMiddleware<ConsentMiddleware>();
+            app.UseSession();
             app.UseRouting();
 
-            app.UseMiddleware<LocationMiddleware>();
+            app.Use(async (context, next) =>
+            {
+                if (context.Request.Path == "/error")
+                {
+                    context.Response.StatusCode = StatusCodes.Status404NotFound;
+                    //await Task.CompletedTask;
+                }
+                else
+                {
+                    await next();
+                }
+            });
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
+                endpoints.MapFallback(async context =>
                 {
-                    logger.LogTrace("Response for / started");
-                    logger.LogDebug("Response for / started");
-                    logger.LogInformation("Response for / started");
-                    logger.LogError("Response for / started");
-                    logger.LogCritical("Response for / started");
-
-                    await context.Response.WriteAsync("Hello World!");
-
-                    logger.LogDebug("Response for / completed");
+                    await context.Response.WriteAsync("Routed to fallback endpoint");
                 });
             });
+
+
+            //app.Run(context => {
+            //    throw new Exception("Something has gone wrong");
+            //});
         }
     }
 }
