@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +26,12 @@ namespace WebApp
             });
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddRazorPages().AddRazorRuntimeCompilation();
+
+            services.Configure<RazorPagesOptions>(opts =>
+            {
+                opts.Conventions.AddPageRoute("/Index", "/extra/page/{id:long?}");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +45,7 @@ namespace WebApp
                 endpoints.MapControllers();
                 //endpoints.MapControllerRoute("Default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
             });
 
             SeedData.SeedDatabase(context);
