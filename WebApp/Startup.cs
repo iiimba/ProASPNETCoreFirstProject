@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebApp.Filters;
 using WebApp.Models;
 using WebApp.TagHelpers;
 
@@ -39,6 +40,13 @@ namespace WebApp
             });
 
             services.Configure<MvcOptions>(opts => opts.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(value => "Please enter a value"));
+
+            services.AddScoped<GuidResponseAttribute>();
+            services.Configure<MvcOptions>(opts =>
+            {
+                opts.Filters.Add<HttpsOnlyAttribute>();
+                opts.Filters.Add(new MessageAttribute("This is the globally-scoped filter"));
+            });
         }
 
         public void Configure(IApplicationBuilder app, DataContext context, IAntiforgery antiforgery)
