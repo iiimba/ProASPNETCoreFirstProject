@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platform", "Platform\Platfo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csproj", "{BE360C64-C3D8-4D37-8CB1-D48F957D8B15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Advanced", "Advanced\Advanced.csproj", "{4CBB2531-5626-493A-91BD-056BA72EA3CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Advanced", "Advanced\Advanced.csproj", "{4CBB2531-5626-493A-91BD-056BA72EA3CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

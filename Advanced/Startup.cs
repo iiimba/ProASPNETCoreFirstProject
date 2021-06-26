@@ -1,4 +1,5 @@
 using Advanced.Models;
+using Advanced.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -31,6 +32,7 @@ namespace Advanced
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddServerSideBlazor();
+            services.AddSingleton<ToggleService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +50,7 @@ namespace Advanced
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
                 endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/_Host");
             });
 
             SeedData.SeedDatabase(context);
