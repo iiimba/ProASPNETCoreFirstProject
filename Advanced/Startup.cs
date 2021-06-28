@@ -1,5 +1,7 @@
 using Advanced.Models;
 using Advanced.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +10,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.Text;
 
 namespace Advanced
 {
@@ -48,16 +53,48 @@ namespace Advanced
                 opts.User.RequireUniqueEmail = true;
                 opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
             });
+
+            services.AddAuthentication(opts =>
+            {
+                opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                opts.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(opts =>
+            {
+                opts.Events.DisableRedirectForPath(e => e.OnRedirectToLogin, "/api", StatusCodes.Status401Unauthorized);
+                opts.Events.DisableRedirectForPath(e => e.OnRedirectToAccessDenied, "/api", StatusCodes.Status403Forbidden);
+            }).AddJwtBearer(opts =>
+            {
+                opts.RequireHttpsMetadata = false;
+                opts.SaveToken = true;
+                opts.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["jwtSecret"])),
+                    ValidateAudience = false,
+                    ValidateIssuer = false
+                };
+                opts.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = async ctx =>
+                    {
+                        var usrmgr = ctx.HttpContext.RequestServices.GetRequiredService<UserManager<IdentityUser>>();
+                        var signinmgr = ctx.HttpContext.RequestServices.GetRequiredService<SignInManager<IdentityUser>>();
+                        var username = ctx.Principal.FindFirst(ClaimTypes.Name)?.Value;
+                        var idUser = await usrmgr.FindByNameAsync(username);
+                        ctx.Principal = await signinmgr.CreateUserPrincipalAsync(idUser);
+                    }
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, DataContext context)
         {
             app.UseDeveloperExceptionPage();
-
             app.UseStaticFiles();
-
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -69,6 +106,7 @@ namespace Advanced
             });
 
             SeedData.SeedDatabase(context);
+            IdentitySeedData.CreateAdminAccount(app.ApplicationServices, Configuration);
         }
     }
 }
