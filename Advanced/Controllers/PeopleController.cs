@@ -8,7 +8,7 @@ namespace Advanced.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = "Identity.Application, Bearer")]
+    //[Authorize(AuthenticationSchemes = "Identity.Application, Bearer")]
     public class PeopleController : ControllerBase
     {
         private readonly DataContext _context;
@@ -27,6 +27,14 @@ namespace Advanced.Controllers
                 people.Department.People = null;
                 people.Location.People = null;
             }
+
+            return peoples;
+        }
+
+        [HttpGet("Test")]
+        public async Task<Person[]> GetTest()
+        {
+            var peoples = new Person[] { new Person { Firstname = "Vlad", Surname = "Mis" } };
 
             return peoples;
         }
