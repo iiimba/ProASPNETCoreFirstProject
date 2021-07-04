@@ -47,12 +47,14 @@ namespace IISTestApplication
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "IISTestApplication v1"));
 
+            app.UseCors(builder =>
+            {
+                builder.WithOrigins("https://football.ua");
+                builder.AllowAnyMethod();
+            });
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
