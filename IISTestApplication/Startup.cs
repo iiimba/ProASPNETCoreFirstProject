@@ -1,3 +1,7 @@
+using IISTestApplication.Repositories;
+using IISTestApplication.Repositories.Interfaces;
+using IISTestApplication.Services;
+using IISTestApplication.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +35,9 @@ namespace IISTestApplication
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "IISTestApplication", Version = "v1" });
             });
+
+            services.AddTransient<IPeopleRepository, PeopleRepository>();
+            services.AddTransient<IBsonService, BsonService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

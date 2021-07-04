@@ -1,6 +1,6 @@
 ﻿using IISTestApplication.Models;
+using IISTestApplication.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace IISTestApplication.Controllers
@@ -9,17 +9,17 @@ namespace IISTestApplication.Controllers
     [Route("api/[controller]")]
     public class PeopleController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IPeopleRepository _peopleRepository;
 
-        public PeopleController(DataContext context)
+        public PeopleController(IPeopleRepository peopleRepository)
         {
-            _context = context;
+            _peopleRepository = peopleRepository;
         }
 
         [HttpGet]
         public async Task<Person[]> Get()
         {
-            var peoples = await _context.People.ToArrayAsync();
+            var peoples = await _peopleRepository.GetAllAsync();
 
             return peoples;
         }
