@@ -1,14 +1,16 @@
+using IISTestApplication.Hubs;
 using IISTestApplication.Repositories;
 using IISTestApplication.Repositories.Interfaces;
 using IISTestApplication.Services;
 using IISTestApplication.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 
 namespace IISTestApplication
 {
@@ -36,6 +38,12 @@ namespace IISTestApplication
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "IISTestApplication", Version = "v1" });
             });
 
+            services.AddSignalR(hubOptions =>
+            {
+                hubOptions.EnableDetailedErrors = true;
+                hubOptions.KeepAliveInterval = TimeSpan.FromMinutes(1);
+            });
+
             services.AddTransient<IPeopleRepository, PeopleRepository>();
             services.AddTransient<IBsonService, BsonService>();
         }
@@ -46,7 +54,7 @@ namespace IISTestApplication
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "IISTestApplication v1"));
-
+            app.UseStaticFiles();
             app.UseCors(builder =>
             {
                 builder.WithOrigins("https://football.ua");
@@ -58,6 +66,13 @@ namespace IISTestApplication
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat", options =>
+                {
+                    options.ApplicationMaxBufferSize = 64;
+                    options.TransportMaxBufferSize = 64;
+                    options.LongPolling.PollTimeout = TimeSpan.FromMinutes(1);
+                    options.Transports = HttpTransportType.LongPolling | HttpTransportType.WebSockets;
+                });
             });
         }
     }
