@@ -12,15 +12,16 @@
     </div>
     <br /><div id="notifyForm">
         <input type="text" id="notify" />
-        <input type="button" id="notifyBtn" value="Nitify" />
+        <input type="button" id="notifyBtn" value="Notify" />
     </div>
 
     <div id="chatroom"></div>
 
     <script src="https://unpkg.com/@microsoft/signalr@3.1.0/dist/browser/signalr.min.js"></script>
     <script>
+        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IlZsYWQiLCJuYmYiOjE2MjU5MzAzMDUsImV4cCI6MTYyNjAxNjcwNSwiaWF0IjoxNjI1OTMwMzA1fQ.qpZ7WIMu1TqjUsm4OTIZHiNZK2nAsC1vVUwB4k9wwWc";
         const hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl("/chat")
+            .withUrl("/chatToken", { accessTokenFactory: () => token })
             .build();
 
         hubConnection.on("Receive", function (message, userName) {

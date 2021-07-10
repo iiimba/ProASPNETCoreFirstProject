@@ -1,5 +1,6 @@
 using AutoMapper;
 using IISTestApplication.Hubs;
+using IISTestApplication.Hubs.Providers;
 using IISTestApplication.Repositories;
 using IISTestApplication.Repositories.Interfaces;
 using IISTestApplication.Services;
@@ -9,12 +10,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -62,11 +66,12 @@ namespace IISTestApplication
             services.AddSignalR(hubOptions =>
             {
                 hubOptions.EnableDetailedErrors = true;
-                hubOptions.KeepAliveInterval = TimeSpan.FromMinutes(1);
             });
 
             services.AddTransient<IPeopleRepository, PeopleRepository>();
             services.AddTransient<IBsonService, BsonService>();
+
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
             services.AddAuthentication()
                 .AddJwtBearer(opts =>
@@ -122,6 +127,9 @@ namespace IISTestApplication
                     options.Transports = HttpTransportType.LongPolling | HttpTransportType.WebSockets;
                 });
                 endpoints.MapHub<ControllerHub>("/controller");
+                endpoints.MapHub<ChatTokenHub>("/chatToken");
+                endpoints.MapHub<ChatUserHub>("/chatUser");
+                endpoints.MapHub<ChatGroupHub>("/chatGroup");
             });
 
             IdentitySeedData.CreateAdminAccount(app.ApplicationServices, Configuration);
