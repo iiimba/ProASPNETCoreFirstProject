@@ -121,6 +121,7 @@ namespace IISTestApplication
                     options.LongPolling.PollTimeout = TimeSpan.FromMinutes(1);
                     options.Transports = HttpTransportType.LongPolling | HttpTransportType.WebSockets;
                 });
+                endpoints.MapHub<ControllerHub>("/controller");
             });
 
             IdentitySeedData.CreateAdminAccount(app.ApplicationServices, Configuration);

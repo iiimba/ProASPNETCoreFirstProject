@@ -2,35 +2,32 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>SignalR Chat - Metanit.com</title>
+    <title>SignalR Chat</title>
 </head>
 <body>
-    <div id="loginBlock">
-        Введите логин:<br />
-        <input id="userName" type="text" />
-        <input id="loginBtn" type="button" value="Войти" />
-    </div><br />
-
-    <div id="header"></div><br />
-
+    <div id="header"></div>
     <div id="inputForm">
         <input type="text" id="message" />
         <input type="button" id="sendBtn" value="Отправить" />
     </div>
+    <br /><div id="notifyForm">
+        <input type="text" id="notify" />
+        <input type="button" id="notifyBtn" value="Уведомление" />
+    </div>
+
     <div id="chatroom"></div>
-    <script src="js/signalr/dist/browser/signalr.min.js"></script>
+
+    <script src="https://unpkg.com/@microsoft/signalr@3.1.0/dist/browser/signalr.min.js"></script>
     <script>
         const hubConnection = new signalR.HubConnectionBuilder()
             .withUrl("/chat")
             .build();
 
-        let userName = '';
-        // получение сообщения от сервера
-        hubConnection.on('Send', function (message, userName) {
+        hubConnection.on("Receive", function (message, userName) {
 
             // создаем элемент <b> для имени пользователя
             let userNameElem = document.createElement("b");
-            userNameElem.appendChild(document.createTextNode(userName + ': '));
+            userNameElem.appendChild(document.createTextNode(userName + ": "));
 
             // создает элемент <p> для сообщения пользователя
             let elem = document.createElement("p");
@@ -42,15 +39,14 @@
 
         });
 
-        // установка имени пользователя
-        document.getElementById("loginBtn").addEventListener("click", function (e) {
-            userName = document.getElementById("userName").value;
-            document.getElementById("header").innerHTML = '<h3>Welcome ' + userName + '</h3>';
-        });
-        // отправка сообщения на сервер
         document.getElementById("sendBtn").addEventListener("click", function (e) {
             let message = document.getElementById("message").value;
-            hubConnection.invoke("Receive", message, userName);
+            hubConnection.invoke("Send", message);
+        });
+
+        document.getElementById("notifyBtn").addEventListener("click", function (e) {
+            let message = document.getElementById("notify").value;
+            hubConnection.invoke("Notify", message);
         });
 
         hubConnection.start();

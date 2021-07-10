@@ -1,13 +1,21 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 
 namespace IISTestApplication.Hubs
 {
+    [Authorize]
     public class ChatHub : Hub
     {
-        public Task Receive(string message, string userName)
+        public async Task Send(string message)
         {
-            return Clients.All.SendAsync("Send", message, userName);
+            await Clients.AllExcept(Context.ConnectionId).SendAsync("Receive", message, Context.User.Identity.Name);
+        }
+
+        [Authorize(Roles = "Admins")]
+        public async Task Notify(string message)
+        {
+            await Clients.AllExcept(Context.ConnectionId).SendAsync("Receive", message, Context.User.Identity.Name);
         }
     }
 }
