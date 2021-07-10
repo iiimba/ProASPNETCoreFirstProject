@@ -4,6 +4,7 @@ using IISTestApplication.Repositories;
 using IISTestApplication.Repositories.Interfaces;
 using IISTestApplication.Services;
 using IISTestApplication.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
@@ -11,8 +12,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Security.Claims;
+using System.Text;
 
 namespace IISTestApplication
 {
@@ -63,6 +67,32 @@ namespace IISTestApplication
 
             services.AddTransient<IPeopleRepository, PeopleRepository>();
             services.AddTransient<IBsonService, BsonService>();
+
+            services.AddAuthentication()
+                .AddJwtBearer(opts =>
+                {
+                    opts.RequireHttpsMetadata = false;
+                    opts.SaveToken = true;
+                    opts.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["jwtSecret"])),
+                        ValidateAudience = false,
+                        ValidateIssuer = false
+                    };
+
+                    opts.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = async ctx =>
+                        {
+                            var usrmgr = ctx.HttpContext.RequestServices.GetRequiredService<UserManager<IdentityUser>>();
+                            var signinmgr = ctx.HttpContext.RequestServices.GetRequiredService<SignInManager<IdentityUser>>();
+                            var username = ctx.Principal.FindFirst(ClaimTypes.Name)?.Value;
+                            var idUser = await usrmgr.FindByNameAsync(username);
+                            ctx.Principal = await signinmgr.CreateUserPrincipalAsync(idUser);
+                        }
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace IISTestApplication.Controllers
 {
-    [Authorize(Roles = "Admins")]
+    [Authorize(AuthenticationSchemes = "Identity.Application, Bearer", Roles = "Admins")]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
