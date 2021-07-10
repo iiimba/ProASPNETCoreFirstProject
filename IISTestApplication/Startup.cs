@@ -1,3 +1,4 @@
+using AutoMapper;
 using IISTestApplication.Hubs;
 using IISTestApplication.Repositories;
 using IISTestApplication.Repositories.Interfaces;
@@ -6,6 +7,7 @@ using IISTestApplication.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,11 +28,26 @@ namespace IISTestApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MapperProfile());
+            });
+
+            var mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             services.AddDbContext<DataContext>(opts =>
             {
                 opts.UseSqlServer(Configuration["ConnectionStrings:PeopleConnection"]);
                 opts.EnableSensitiveDataLogging(true);
             });
+
+            services.AddDbContext<IdentityContext>(opts =>
+            {
+                opts.UseSqlServer(Configuration["ConnectionStrings:IdentityConnection"]);
+            });
+
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -62,6 +79,7 @@ namespace IISTestApplication
             });
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
@@ -74,6 +92,8 @@ namespace IISTestApplication
                     options.Transports = HttpTransportType.LongPolling | HttpTransportType.WebSockets;
                 });
             });
+
+            IdentitySeedData.CreateAdminAccount(app.ApplicationServices, Configuration);
         }
     }
 }
