@@ -1,4 +1,3 @@
-using AutoMapper;
 using IISTestApplication.Hubs;
 using IISTestApplication.Hubs.Providers;
 using IISTestApplication.Repositories;
@@ -17,8 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -36,11 +33,7 @@ namespace IISTestApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MapperProfile());
-            });
-
+            var mapperConfig = MapperProfile.GetMapperConfiguration();
             var mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
@@ -133,6 +126,7 @@ namespace IISTestApplication
             });
 
             IdentitySeedData.CreateAdminAccount(app.ApplicationServices, Configuration);
+            OrderSeedData.PopulateOrders(app);
         }
     }
 }
