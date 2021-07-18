@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcService", "GrpcService\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcClient", "GrpcClient\GrpcClient.csproj", "{2CD26EB4-BDB7-46F8-B498-2FA111D78CF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OData", "OData\OData.csproj", "{DDCC191C-B0AD-405A-9886-A1BA786173A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData", "OData\OData.csproj", "{DDCC191C-B0AD-405A-9886-A1BA786173A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

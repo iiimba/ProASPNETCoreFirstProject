@@ -17,5 +17,9 @@ namespace IISTestApplication
         public DbSet<OrderLine> OrderLines { get; set; }
 
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<FileMetadata> FileMetadatas { get; set; }
+
+        public DbSet<File> Files { get; set; }
     }
 }
