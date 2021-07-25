@@ -63,6 +63,7 @@ namespace IISTestApplication
 
             services.AddTransient<IPeopleRepository, PeopleRepository>();
             services.AddTransient<IBsonService, BsonService>();
+            services.AddTransient<IRedisService, RedisService>();
 
             services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
@@ -91,6 +92,11 @@ namespace IISTestApplication
                         }
                     };
                 });
+
+            services.AddDistributedRedisCache(option =>
+            {
+                option.Configuration = $"{Configuration["Redis:Server"]}:{Configuration["Redis:Port"]}";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
