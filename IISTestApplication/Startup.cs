@@ -1,5 +1,6 @@
 using IISTestApplication.Hubs;
 using IISTestApplication.Hubs.Providers;
+using IISTestApplication.Models;
 using IISTestApplication.Repositories;
 using IISTestApplication.Repositories.Interfaces;
 using IISTestApplication.Services;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 using System;
 using System.Security.Claims;
 using System.Text;
@@ -60,6 +62,11 @@ namespace IISTestApplication
             {
                 hubOptions.EnableDetailedErrors = true;
             });
+
+            var client = new MongoClient(Configuration["MongoDb:ConnectionStrings"]);
+            var database = client.GetDatabase(Configuration["MongoDb:TestDatabase"]);
+            var users = database.GetCollection<User>(Configuration["MongoDb:UserCollection"]);
+            services.AddTransient(sp => users);
 
             services.AddTransient<IPeopleRepository, PeopleRepository>();
             services.AddTransient<IBsonService, BsonService>();
