@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OData", "OData\OData.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{BDDC0002-E652-4CBA-9EB0-02C8182AD6F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreditCardApplications", "CreditCardApplications\CreditCardApplications.csproj", "{3A21EC82-FA44-4CE5-BFF6-043AA0B2577B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{BDDC0002-E652-4CBA-9EB0-02C8182AD6F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDDC0002-E652-4CBA-9EB0-02C8182AD6F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDDC0002-E652-4CBA-9EB0-02C8182AD6F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A21EC82-FA44-4CE5-BFF6-043AA0B2577B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A21EC82-FA44-4CE5-BFF6-043AA0B2577B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A21EC82-FA44-4CE5-BFF6-043AA0B2577B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A21EC82-FA44-4CE5-BFF6-043AA0B2577B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
