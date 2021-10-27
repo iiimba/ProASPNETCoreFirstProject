@@ -1,4 +1,6 @@
-﻿namespace CreditCardApplications
+﻿using System;
+
+namespace CreditCardApplications
 {
     public interface ILicenseData
     {
@@ -21,5 +23,7 @@
         IServiceInformation ServiceInformation { get; }
 
         ValidationMode ValidationMode { get; set; }
+
+        event EventHandler ValidatorLookupPerformed;
     }
 }
