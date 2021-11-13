@@ -19,7 +19,7 @@
 
     class RenoBuilder : CarBuilder
     {
-        private RenoCar car;
+        private RenoCar car = new RenoCar();
 
         public override void SetBrand()
         {
@@ -49,7 +49,7 @@
 
     class OpelBuilder : CarBuilder
     {
-        private OpelCar car;
+        private OpelCar car = new OpelCar();
 
         public override void SetBrand()
         {

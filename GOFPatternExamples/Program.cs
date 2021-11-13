@@ -2,6 +2,8 @@
 using GOFPatternExamples.AbstractFactory.Factory;
 using GOFPatternExamples.Builder;
 using GOFPatternExamples.FactoryMethod;
+using GOFPatternExamples.Prototype;
+using System;
 
 namespace GOFPatternExamples
 {
@@ -14,6 +16,8 @@ namespace GOFPatternExamples
             BuilderExample();
 
             FactoryMethodExample();
+
+            PrototypeExample();
         }
 
         /// <summary>
@@ -50,6 +54,14 @@ namespace GOFPatternExamples
             var seaLogistics = new SeaLogistics();
             seaLogistics.PlanDelivery();
             var ship = seaLogistics.FactoryMethod();
+        }
+
+        static void PrototypeExample()
+        {
+            var developer = new Developer("Vlad", 1000, "C#");
+            var developerClone = developer.Clone() as Developer;
+
+            Console.WriteLine(developerClone);
         }
     }
 }
