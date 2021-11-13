@@ -3,6 +3,7 @@ using GOFPatternExamples.AbstractFactory.Factory;
 using GOFPatternExamples.Builder;
 using GOFPatternExamples.FactoryMethod;
 using GOFPatternExamples.Prototype;
+using GOFPatternExamples.Singleton;
 using System;
 
 namespace GOFPatternExamples
@@ -18,6 +19,10 @@ namespace GOFPatternExamples
             FactoryMethodExample();
 
             PrototypeExample();
+
+            SingletonExample();
+
+            Console.ReadKey();
         }
 
         /// <summary>
@@ -62,6 +67,27 @@ namespace GOFPatternExamples
             var developerClone = developer.Clone() as Developer;
 
             Console.WriteLine(developerClone);
+        }
+
+        static void SingletonExample()
+        {
+            var singleton1 = Singleton.Singleton.GetSingleton();
+            var singleton2 = Singleton.Singleton.GetSingleton();
+
+            Console.WriteLine(singleton1.GetHashCode());
+            Console.WriteLine(singleton2.GetHashCode());
+
+            var singletonForMultithreading1 = SingletonForMultithreading.GetSingleton();
+            var singletonForMultithreading2 = SingletonForMultithreading.GetSingleton();
+
+            Console.WriteLine(singletonForMultithreading1.GetHashCode());
+            Console.WriteLine(singletonForMultithreading2.GetHashCode());
+
+            var singletonForMultithreadingWithoutLock1 = SingletonForMultithreadingWithoutLock.GetSingleton();
+            var singletonForMultithreadingWithoutLock2 = SingletonForMultithreadingWithoutLock.GetSingleton();
+
+            Console.WriteLine(singletonForMultithreadingWithoutLock1.GetHashCode());
+            Console.WriteLine(singletonForMultithreadingWithoutLock2.GetHashCode());
         }
     }
 }
