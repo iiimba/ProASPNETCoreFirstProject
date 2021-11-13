@@ -1,5 +1,6 @@
 ﻿using GOFPatternExamples.AbstractFactory;
 using GOFPatternExamples.AbstractFactory.Factory;
+using GOFPatternExamples.Adapter;
 using GOFPatternExamples.Builder;
 using GOFPatternExamples.FactoryMethod;
 using GOFPatternExamples.Prototype;
@@ -21,6 +22,8 @@ namespace GOFPatternExamples
             PrototypeExample();
 
             SingletonExample();
+
+            AdaptorExample();
 
             Console.ReadKey();
         }
@@ -88,6 +91,15 @@ namespace GOFPatternExamples
 
             Console.WriteLine(singletonForMultithreadingWithoutLock1.GetHashCode());
             Console.WriteLine(singletonForMultithreadingWithoutLock2.GetHashCode());
+        }
+
+        static void AdaptorExample()
+        {
+            ITarget target1 = new ClassAdapter();
+            target1.Request();
+
+            Target target2 = new ObjectAdapter();
+            target2.Request();
         }
     }
 }
