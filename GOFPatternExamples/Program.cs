@@ -1,6 +1,7 @@
 ﻿using GOFPatternExamples.AbstractFactory;
 using GOFPatternExamples.AbstractFactory.Factory;
 using GOFPatternExamples.Builder;
+using GOFPatternExamples.FactoryMethod;
 
 namespace GOFPatternExamples
 {
@@ -11,6 +12,8 @@ namespace GOFPatternExamples
             AbstractFactoryExample();
 
             BuilderExample();
+
+            FactoryMethodExample();
         }
 
         /// <summary>
@@ -36,6 +39,17 @@ namespace GOFPatternExamples
             var opelBuilder = new OpelBuilder();
             director.MakeSportCar(opelBuilder);
             var opelCar = opelBuilder.GetResult();
+        }
+
+        static void FactoryMethodExample()
+        {
+            var roadLogistics = new RoadLogistics();
+            roadLogistics.PlanDelivery();
+            var truck = roadLogistics.FactoryMethod();
+
+            var seaLogistics = new SeaLogistics();
+            seaLogistics.PlanDelivery();
+            var ship = seaLogistics.FactoryMethod();
         }
     }
 }
