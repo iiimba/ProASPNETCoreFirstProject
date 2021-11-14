@@ -7,20 +7,25 @@ namespace GOFPatternExamples.Composite
     {
         public string Name { get; init; }
 
+        public decimal Price { get; init; }
+
         public int Depth { get; set; }
 
-        public Component(string name)
+        public Component(string name, decimal price)
         {
             Name = name;
+            Price = price;
         }
 
         public abstract void Operation();
+
+        public abstract decimal GetPrice();
     }
 
     class Product : Component
     {
-        public Product(string name)
-            : base(name)
+        public Product(string name, decimal price)
+            : base(name, price)
         {
 
         }
@@ -29,14 +34,19 @@ namespace GOFPatternExamples.Composite
         {
             Console.WriteLine($"Real product: {Name}, Depth: {Depth}");
         }
+
+        public override decimal GetPrice()
+        {
+            return Price;
+        }
     }
 
     class Box : Component
     {
         private List<Component> _composites = new List<Component>();
 
-        public Box(string name)
-            : base(name)
+        public Box(string name, decimal price)
+            : base(name, price)
         {
 
         }
@@ -73,6 +83,17 @@ namespace GOFPatternExamples.Composite
             {
                 composite.Operation();
             }
+        }
+
+        public override decimal GetPrice()
+        {
+            var price = Price;
+            foreach (var composite in _composites)
+            {
+                price += composite.GetPrice();
+            }
+
+            return price;
         }
     }
 }

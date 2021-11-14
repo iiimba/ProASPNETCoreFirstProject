@@ -119,14 +119,14 @@ namespace GOFPatternExamples
 
         static void CompositeExample()
         {
-            var mainBox = new Box("MainBox");
-            var smallerBox = new Box("SmallerBox");
-            var smallestBox = new Box("SmallestBox");
+            var mainBox = new Box("MainBox", 10);
+            var smallerBox = new Box("SmallerBox", 5);
+            var smallestBox = new Box("SmallestBox", 2);
 
-            var phone = new Product("Phone");
-            var headset = new Product("Headset");
-            var charger = new Product("Charger");
-            var memoryCard = new Product("MemoryCard");
+            var phone = new Product("Phone", 1299);
+            var headset = new Product("Headset", 359);
+            var charger = new Product("Charger", 15.99m);
+            var memoryCard = new Product("MemoryCard", 29);
 
             mainBox.Add(phone);
             mainBox.Add(smallerBox);
@@ -138,6 +138,8 @@ namespace GOFPatternExamples
             smallestBox.Add(memoryCard);
 
             mainBox.Operation();
+
+            Console.WriteLine($"Full price: {mainBox.GetPrice()}");
         }
     }
 }
