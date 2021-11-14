@@ -1,6 +1,7 @@
 ﻿using GOFPatternExamples.AbstractFactory;
 using GOFPatternExamples.AbstractFactory.Factory;
 using GOFPatternExamples.Adapter;
+using GOFPatternExamples.Bridge;
 using GOFPatternExamples.Builder;
 using GOFPatternExamples.FactoryMethod;
 using GOFPatternExamples.Prototype;
@@ -24,6 +25,8 @@ namespace GOFPatternExamples
             SingletonExample();
 
             AdaptorExample();
+
+            BridgeExample();
 
             Console.ReadKey();
         }
@@ -100,6 +103,15 @@ namespace GOFPatternExamples
 
             Target target2 = new ObjectAdapter();
             target2.Request();
+        }
+
+        static void BridgeExample()
+        {
+            var message1 = new SystemMessage(new MailSender()) { Subject = "Subject1", Body = "Body1" };
+            message1.Send();
+
+            var message2 = new UserMessage(new WebRequestSender()) { Subject = "Subject2", Body = "Body2", Comment = "Comment2" };
+            message2.Send();
         }
     }
 }
