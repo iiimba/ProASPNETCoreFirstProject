@@ -3,6 +3,7 @@ using GOFPatternExamples.AbstractFactory.Factory;
 using GOFPatternExamples.Adapter;
 using GOFPatternExamples.Bridge;
 using GOFPatternExamples.Builder;
+using GOFPatternExamples.Composite;
 using GOFPatternExamples.FactoryMethod;
 using GOFPatternExamples.Prototype;
 using GOFPatternExamples.Singleton;
@@ -27,6 +28,8 @@ namespace GOFPatternExamples
             AdaptorExample();
 
             BridgeExample();
+
+            CompositeExample();
 
             Console.ReadKey();
         }
@@ -112,6 +115,29 @@ namespace GOFPatternExamples
 
             var message2 = new UserMessage(new WebRequestSender()) { Subject = "Subject2", Body = "Body2", Comment = "Comment2" };
             message2.Send();
+        }
+
+        static void CompositeExample()
+        {
+            var mainBox = new Box("MainBox");
+            var smallerBox = new Box("SmallerBox");
+            var smallestBox = new Box("SmallestBox");
+
+            var phone = new Product("Phone");
+            var headset = new Product("Headset");
+            var charger = new Product("Charger");
+            var memoryCard = new Product("MemoryCard");
+
+            mainBox.Add(phone);
+            mainBox.Add(smallerBox);
+
+            smallerBox.Add(headset);
+            smallerBox.Add(charger);
+            smallerBox.Add(smallestBox);
+
+            smallestBox.Add(memoryCard);
+
+            mainBox.Operation();
         }
     }
 }
