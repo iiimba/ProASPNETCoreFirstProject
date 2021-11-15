@@ -39,6 +39,8 @@ namespace GOFPatternExamples
 
             FlyweightExample();
 
+            ProxyExample();
+
             Console.ReadKey();
         }
 
@@ -182,6 +184,12 @@ namespace GOFPatternExamples
 
             var flyweight3 = new UnsharedFlyweight();
             flyweight3.Operation(7);
+        }
+
+        static void ProxyExample()
+        {
+            var proxy = new Proxy.Proxy();
+            proxy.Request();
         }
     }
 }
