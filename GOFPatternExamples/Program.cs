@@ -4,6 +4,7 @@ using GOFPatternExamples.Adapter;
 using GOFPatternExamples.Bridge;
 using GOFPatternExamples.Builder;
 using GOFPatternExamples.Composite;
+using GOFPatternExamples.Decorator;
 using GOFPatternExamples.FactoryMethod;
 using GOFPatternExamples.Prototype;
 using GOFPatternExamples.Singleton;
@@ -30,6 +31,8 @@ namespace GOFPatternExamples
             BridgeExample();
 
             CompositeExample();
+
+            DecoratorExample();
 
             Console.ReadKey();
         }
@@ -140,6 +143,18 @@ namespace GOFPatternExamples
             mainBox.Operation();
 
             Console.WriteLine($"Full price: {mainBox.GetPrice()}");
+        }
+
+        static void DecoratorExample()
+        {
+            var emailSender = new EmailSender();
+            emailSender.Send("12345@mail.com", "Hello world!");
+
+            var skypeSender = new SkypeSender(emailSender){ NickName = "Jack" };
+            skypeSender.Send("12345@mail.com", "Hello world!");
+
+            var facebookSender = new FacebookSender(skypeSender);
+            facebookSender.Send("12345@mail.com", "Hello world!");
         }
     }
 }
