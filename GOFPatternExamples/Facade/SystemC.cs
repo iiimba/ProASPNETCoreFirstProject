@@ -9,3 +9,4 @@ namespace GOFPatternExamples.Facade
             Console.WriteLine(nameof(SystemC.OperationC));
         }
     }
+}
