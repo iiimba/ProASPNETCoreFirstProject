@@ -34,6 +34,8 @@ namespace GOFPatternExamples
 
             DecoratorExample();
 
+            FacadeExample();
+
             Console.ReadKey();
         }
 
@@ -155,6 +157,13 @@ namespace GOFPatternExamples
 
             var facebookSender = new FacebookSender(skypeSender);
             facebookSender.Send("12345@mail.com", "Hello world!");
+        }
+
+        static void FacadeExample()
+        {
+            var facade = new Facade.Facade();
+            facade.MethodA();
+            facade.MethodB();
         }
     }
 }
