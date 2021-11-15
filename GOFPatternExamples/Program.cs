@@ -6,6 +6,7 @@ using GOFPatternExamples.Builder;
 using GOFPatternExamples.Composite;
 using GOFPatternExamples.Decorator;
 using GOFPatternExamples.FactoryMethod;
+using GOFPatternExamples.Flyweight;
 using GOFPatternExamples.Prototype;
 using GOFPatternExamples.Singleton;
 using System;
@@ -35,6 +36,8 @@ namespace GOFPatternExamples
             DecoratorExample();
 
             FacadeExample();
+
+            FlyweightExample();
 
             Console.ReadKey();
         }
@@ -164,6 +167,21 @@ namespace GOFPatternExamples
             var facade = new Facade.Facade();
             facade.MethodA();
             facade.MethodB();
+        }
+
+        static void FlyweightExample()
+        {
+            var flyweightFactory = new FlyweightFactory();
+            var flyweight1 = flyweightFactory.GetFlyweight("Test", 11);
+            var flyweight2 = flyweightFactory.GetFlyweight("Test", 12);
+
+            Console.WriteLine(flyweight1 == flyweight2);
+
+            flyweight1.Operation(5);
+            flyweight2.Operation(6);
+
+            var flyweight3 = new UnsharedFlyweight();
+            flyweight3.Operation(7);
         }
     }
 }
