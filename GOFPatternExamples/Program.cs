@@ -3,6 +3,7 @@ using GOFPatternExamples.AbstractFactory.Factory;
 using GOFPatternExamples.Adapter;
 using GOFPatternExamples.Bridge;
 using GOFPatternExamples.Builder;
+using GOFPatternExamples.ChainOfResponsibility;
 using GOFPatternExamples.Composite;
 using GOFPatternExamples.Decorator;
 using GOFPatternExamples.FactoryMethod;
@@ -40,6 +41,8 @@ namespace GOFPatternExamples
             FlyweightExample();
 
             ProxyExample();
+
+            ChainOfResponsibility();
 
             Console.ReadKey();
         }
@@ -190,6 +193,20 @@ namespace GOFPatternExamples
         {
             var proxy = new Proxy.Proxy();
             proxy.Request();
+        }
+
+        static void ChainOfResponsibility()
+        {
+            var handler1 = new ExceptionHandler1();
+            var handler2 = new ExceptionHandler2();
+            var handler3 = new ExceptionHandler3();
+
+            handler1.SetSuccessor(handler2);
+            handler2.SetSuccessor(handler3);
+
+            handler1.Handle(1);
+            handler1.Handle(2);
+            handler1.Handle(3);
         }
     }
 }
