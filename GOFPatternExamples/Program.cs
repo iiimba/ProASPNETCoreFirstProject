@@ -10,6 +10,7 @@ using GOFPatternExamples.Decorator;
 using GOFPatternExamples.FactoryMethod;
 using GOFPatternExamples.Flyweight;
 using GOFPatternExamples.Interpreter;
+using GOFPatternExamples.Iterator;
 using GOFPatternExamples.Prototype;
 using GOFPatternExamples.Singleton;
 using System;
@@ -49,6 +50,8 @@ namespace GOFPatternExamples
             CommandExample();
 
             InterpreterExample();
+
+            IteratorExample();
 
             Console.ReadKey();
         }
@@ -246,6 +249,21 @@ namespace GOFPatternExamples
             expression.Interpret(context);
 
             Console.WriteLine(context.Result);
+        }
+
+        static void IteratorExample()
+        {
+            var aggregate = new ConcreteAggregate();
+            aggregate.Add(3);
+            aggregate.Add(5);
+            aggregate.Add(2);
+
+            var iterator = aggregate.CreateIterator();
+
+            for (object current = iterator.First(); !iterator.IsDone(); current = iterator.Next())
+            {
+                Console.WriteLine(current);
+            }
         }
     }
 }
