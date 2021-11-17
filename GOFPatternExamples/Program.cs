@@ -4,6 +4,7 @@ using GOFPatternExamples.Adapter;
 using GOFPatternExamples.Bridge;
 using GOFPatternExamples.Builder;
 using GOFPatternExamples.ChainOfResponsibility;
+using GOFPatternExamples.Command;
 using GOFPatternExamples.Composite;
 using GOFPatternExamples.Decorator;
 using GOFPatternExamples.FactoryMethod;
@@ -43,6 +44,8 @@ namespace GOFPatternExamples
             ProxyExample();
 
             ChainOfResponsibility();
+
+            CommandExample();
 
             Console.ReadKey();
         }
@@ -207,6 +210,19 @@ namespace GOFPatternExamples
             handler1.Handle(1);
             handler1.Handle(2);
             handler1.Handle(3);
+        }
+
+        static void CommandExample()
+        {
+            var calculator = new Calculator();
+            Console.WriteLine(calculator.Add(50));
+            Console.WriteLine(calculator.Sub(4));
+            Console.WriteLine(calculator.Mul(10));
+            Console.WriteLine(calculator.Redo());
+            Console.WriteLine(calculator.Undo());
+            Console.WriteLine(calculator.Undo());
+            Console.WriteLine(calculator.Undo());
+            Console.WriteLine(calculator.Redo());
         }
     }
 }
