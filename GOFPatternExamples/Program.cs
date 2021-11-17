@@ -12,6 +12,7 @@ using GOFPatternExamples.Flyweight;
 using GOFPatternExamples.Interpreter;
 using GOFPatternExamples.Iterator;
 using GOFPatternExamples.Mediator;
+using GOFPatternExamples.Memento;
 using GOFPatternExamples.Prototype;
 using GOFPatternExamples.Singleton;
 using System;
@@ -55,6 +56,8 @@ namespace GOFPatternExamples
             IteratorExample();
 
             MediatorExample();
+
+            MementoExample();
 
             Console.ReadKey();
         }
@@ -279,6 +282,21 @@ namespace GOFPatternExamples
 
             colleague1.Send($"Hello {nameof(Colleague2)}!");
             colleague2.Send($"Hello {nameof(Colleague1)}!");
+        }
+
+        static void MementoExample()
+        {
+            var originator = new Originator();
+            originator.State = "Initial state";
+
+            var caretaker = new Caretaker();
+            caretaker.Memento = originator.CreateMemento();
+
+            originator.State = "New state";
+
+            originator.SetMemento(caretaker.Memento);
+
+            Console.WriteLine(originator.State);
         }
     }
 }
