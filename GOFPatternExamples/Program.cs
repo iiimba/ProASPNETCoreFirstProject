@@ -9,6 +9,7 @@ using GOFPatternExamples.Composite;
 using GOFPatternExamples.Decorator;
 using GOFPatternExamples.FactoryMethod;
 using GOFPatternExamples.Flyweight;
+using GOFPatternExamples.Interpreter;
 using GOFPatternExamples.Prototype;
 using GOFPatternExamples.Singleton;
 using System;
@@ -46,6 +47,8 @@ namespace GOFPatternExamples
             ChainOfResponsibility();
 
             CommandExample();
+
+            InterpreterExample();
 
             Console.ReadKey();
         }
@@ -223,6 +226,26 @@ namespace GOFPatternExamples
             Console.WriteLine(calculator.Undo());
             Console.WriteLine(calculator.Undo());
             Console.WriteLine(calculator.Redo());
+        }
+
+        static void InterpreterExample()
+        {
+            var context = new Context();
+            context.Source = "aaa";
+            context.Vocabulary = 'a';
+
+            var expression = new NonTerminalExpression();
+            expression.Interpret(context);
+
+            Console.WriteLine(context.Result);
+
+            context.Source = "aab";
+            context.Vocabulary = 'a';
+            context.Position = 0;
+
+            expression.Interpret(context);
+
+            Console.WriteLine(context.Result);
         }
     }
 }
