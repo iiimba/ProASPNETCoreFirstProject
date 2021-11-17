@@ -11,6 +11,7 @@ using GOFPatternExamples.FactoryMethod;
 using GOFPatternExamples.Flyweight;
 using GOFPatternExamples.Interpreter;
 using GOFPatternExamples.Iterator;
+using GOFPatternExamples.Mediator;
 using GOFPatternExamples.Prototype;
 using GOFPatternExamples.Singleton;
 using System;
@@ -52,6 +53,8 @@ namespace GOFPatternExamples
             InterpreterExample();
 
             IteratorExample();
+
+            MediatorExample();
 
             Console.ReadKey();
         }
@@ -264,6 +267,18 @@ namespace GOFPatternExamples
             {
                 Console.WriteLine(current);
             }
+        }
+
+        static void MediatorExample()
+        {
+            var mediator = new ConcreteMediator();
+            var colleague1 = new Colleague1(mediator);
+            var colleague2 = new Colleague2(mediator);
+            mediator.Colleague1 = colleague1;
+            mediator.Colleague2 = colleague2;
+
+            colleague1.Send($"Hello {nameof(Colleague2)}!");
+            colleague2.Send($"Hello {nameof(Colleague1)}!");
         }
     }
 }
