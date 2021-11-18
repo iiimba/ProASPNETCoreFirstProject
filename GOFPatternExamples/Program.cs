@@ -15,6 +15,7 @@ using GOFPatternExamples.Mediator;
 using GOFPatternExamples.Memento;
 using GOFPatternExamples.Prototype;
 using GOFPatternExamples.Singleton;
+using GOFPatternExamples.State.RealExample;
 using System;
 
 namespace GOFPatternExamples
@@ -61,6 +62,9 @@ namespace GOFPatternExamples
 
             ObserverPullModelExample();
             ObserverPushModelExample();
+
+            StateExample();
+            StateRealAwkwardExample();
 
             Console.ReadKey();
         }
@@ -340,6 +344,31 @@ namespace GOFPatternExamples
             publisher.State = "State2";
 
             publisher.Notify();
+        }
+
+        static void StateExample()
+        {
+            var context = new State.Context(new State.ConcreteState1());
+            context.Request();
+            context.Request();
+            context.Request();
+        }
+
+        static void StateRealAwkwardExample()
+        {
+            var account = new Account();
+
+            Console.WriteLine(account.InterestOnLoan);
+
+            account.AddBalance(10_000);
+            account.RequestToChangeCardState();
+
+            Console.WriteLine(account.InterestOnLoan);
+
+            account.AddBalance(1_500_000);
+            account.RequestToChangeCardState();
+
+            Console.WriteLine(account.InterestOnLoan);
         }
     }
 }
