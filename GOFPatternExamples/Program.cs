@@ -59,6 +59,9 @@ namespace GOFPatternExamples
 
             MementoExample();
 
+            ObserverPullModelExample();
+            ObserverPushModelExample();
+
             Console.ReadKey();
         }
 
@@ -297,6 +300,46 @@ namespace GOFPatternExamples
             originator.SetMemento(caretaker.Memento);
 
             Console.WriteLine(originator.State);
+        }
+
+        static void ObserverPullModelExample()
+        {
+            var publisher = new Observer.Pull.ConcreteSubject();
+            publisher.State = "State1";
+
+            publisher.Attach(new Observer.Pull.ConcreteObserver(publisher));
+            publisher.Attach(new Observer.Pull.ConcreteObserver(publisher));
+
+            var observer3 = new Observer.Pull.ConcreteObserver(publisher);
+            publisher.Attach(observer3);
+
+            publisher.Notify();
+
+            publisher.Detach(observer3);
+
+            publisher.State = "State2";
+
+            publisher.Notify();
+        }
+
+        static void ObserverPushModelExample()
+        {
+            var publisher = new Observer.Push.ConcreteSubject();
+            publisher.State = "State1";
+
+            publisher.Attach(new Observer.Push.ConcreteObserver());
+            publisher.Attach(new Observer.Push.ConcreteObserver());
+
+            var observer3 = new Observer.Push.ConcreteObserver();
+            publisher.Attach(observer3);
+
+            publisher.Notify();
+
+            publisher.Detach(observer3);
+
+            publisher.State = "State2";
+
+            publisher.Notify();
         }
     }
 }
