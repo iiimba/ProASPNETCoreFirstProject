@@ -17,6 +17,7 @@ using GOFPatternExamples.Prototype;
 using GOFPatternExamples.Singleton;
 using GOFPatternExamples.State.RealExample;
 using GOFPatternExamples.Strategy;
+using GOFPatternExamples.TemplateMethod;
 using System;
 
 namespace GOFPatternExamples
@@ -68,6 +69,8 @@ namespace GOFPatternExamples
             StateRealAwkwardExample();
 
             StrategyExample();
+
+            TemplateMethodExample();
 
             Console.ReadKey();
         }
@@ -384,6 +387,12 @@ namespace GOFPatternExamples
 
             context.Sort();
             context.ShowItems();
+        }
+
+        static void TemplateMethodExample()
+        {
+            var instance = new DerivedClass();
+            instance.TemplateMethod();
         }
     }
 }
