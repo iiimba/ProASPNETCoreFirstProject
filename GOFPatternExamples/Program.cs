@@ -16,6 +16,7 @@ using GOFPatternExamples.Memento;
 using GOFPatternExamples.Prototype;
 using GOFPatternExamples.Singleton;
 using GOFPatternExamples.State.RealExample;
+using GOFPatternExamples.Strategy;
 using System;
 
 namespace GOFPatternExamples
@@ -65,6 +66,8 @@ namespace GOFPatternExamples
 
             StateExample();
             StateRealAwkwardExample();
+
+            StrategyExample();
 
             Console.ReadKey();
         }
@@ -369,6 +372,18 @@ namespace GOFPatternExamples
             account.RequestToChangeCardState();
 
             Console.WriteLine(account.InterestOnLoan);
+        }
+
+        static void StrategyExample()
+        {
+            var context = new SomeArray();
+            context.Sort();
+            context.ShowItems();
+
+            context.Strategy = new ShellSort();
+
+            context.Sort();
+            context.ShowItems();
         }
     }
 }

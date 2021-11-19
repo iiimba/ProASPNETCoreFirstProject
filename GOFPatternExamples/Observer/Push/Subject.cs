@@ -24,6 +24,8 @@ namespace GOFPatternExamples.Observer.Push
             {
                 observer.Update(State);
             }
+
+            var arr = new List<int>();
         }
     }
 
