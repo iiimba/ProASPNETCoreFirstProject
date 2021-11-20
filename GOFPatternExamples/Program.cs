@@ -18,6 +18,7 @@ using GOFPatternExamples.Singleton;
 using GOFPatternExamples.State.RealExample;
 using GOFPatternExamples.Strategy;
 using GOFPatternExamples.TemplateMethod;
+using GOFPatternExamples.Visitor;
 using System;
 
 namespace GOFPatternExamples
@@ -71,6 +72,8 @@ namespace GOFPatternExamples
             StrategyExample();
 
             TemplateMethodExample();
+
+            VisitorExample();
 
             Console.ReadKey();
         }
@@ -393,6 +396,17 @@ namespace GOFPatternExamples
         {
             var instance = new DerivedClass();
             instance.TemplateMethod();
+        }
+
+        static void VisitorExample()
+        {
+            var structure = new ObjectStructure();
+
+            structure.Add(new ConcreteElement1());
+            structure.Add(new ConcreteElement2());
+            structure.Add(new ConcreteElement1());
+
+            structure.Accept(new ConcreteVisitor());
         }
     }
 }
