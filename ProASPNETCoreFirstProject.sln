@@ -33,7 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreditCardApplications", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreditCardApplications.Tests", "CreditCardApplications.Tests\CreditCardApplications.Tests.csproj", "{CF61676A-AE20-40E2-8CB8-7B0E7329F2DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GOFPatternExamples", "GOFPatternExamples\GOFPatternExamples.csproj", "{5C4323C0-82E8-4DE1-836E-B1C9760324F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GOFPatternExamples", "GOFPatternExamples\GOFPatternExamples.csproj", "{5C4323C0-82E8-4DE1-836E-B1C9760324F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQWebApplication", "RabbitMQWebApplication\RabbitMQWebApplication.csproj", "{5787E948-D872-4B0D-B0A0-ECD0429BD0A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +107,10 @@ Global
 		{5C4323C0-82E8-4DE1-836E-B1C9760324F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C4323C0-82E8-4DE1-836E-B1C9760324F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C4323C0-82E8-4DE1-836E-B1C9760324F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5787E948-D872-4B0D-B0A0-ECD0429BD0A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5787E948-D872-4B0D-B0A0-ECD0429BD0A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5787E948-D872-4B0D-B0A0-ECD0429BD0A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5787E948-D872-4B0D-B0A0-ECD0429BD0A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
