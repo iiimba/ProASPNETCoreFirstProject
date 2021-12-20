@@ -1,4 +1,6 @@
-﻿namespace RabbitMQWebApplication.Services.Interfaces
+﻿using RabbitMQWebApplication.Models;
+
+namespace RabbitMQWebApplication.Services.Interfaces
 {
     public interface IRabbitMQService
     {
@@ -7,5 +9,7 @@
         void SendBatchMessages(string message, int count);
 
         public void SendMessageToExchange(string message);
+
+        public void SendMessageToExchangeDirect(string message, RoutingKey routingKey);
     }
 }

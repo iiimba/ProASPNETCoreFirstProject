@@ -35,7 +35,15 @@ namespace RabbitMQWebApplication.Controllers
         public IActionResult SendMessageToExchange(RabbitMQMessage message)
         {
             _rabbitMQService.SendMessageToExchange(message.Message);
+            
+            return Ok();
+        }
 
+        [HttpPost("SendToExchangeDirect")]
+        public IActionResult SendMessageToExchangeDirect(RabbitMQDirectMessage message)
+        {
+            _rabbitMQService.SendMessageToExchangeDirect(message.Message, message.RoutingKey);
+            
             return Ok();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using RabbitMQReceiverApplication.Consumers;
+using RabbitMQWebApplication.Models;
 using System;
 
 namespace RabbitMQReceiverApplication
@@ -9,7 +10,11 @@ namespace RabbitMQReceiverApplication
         {
             //TaskConsumer.StartConsumer();
 
-            LogsConsumer.StartConsumer();
+            //LogsConsumer.StartConsumer();
+
+            DirectLogsExample.StartConsumer(RoutingKey.Error);
+
+            //DirectLogsExample.StartConsumer(new RoutingKey[] { RoutingKey.Info, RoutingKey.Warning, RoutingKey.Error });
 
             Console.ReadLine();
         }

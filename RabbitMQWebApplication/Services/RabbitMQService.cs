@@ -98,5 +98,25 @@ namespace RabbitMQWebApplication.Services
                 _logger.LogInformation($"Sent: {message}");
             }
         }
+
+        public void SendMessageToExchangeDirect(string message, RoutingKey routingKey)
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.ExchangeDeclare(exchange: "direct_logs", type: ExchangeType.Direct);
+
+                var body = JsonSerializer.SerializeToUtf8Bytes(new RabbitMQDirectMessage { Message = message, RoutingKey = routingKey });
+
+                channel.BasicPublish(exchange: "direct_logs",
+                    routingKey: routingKey.ToString().ToLower(),
+                    basicProperties: null,
+                    body: body);
+
+                _logger.LogInformation($"Sent: {message}, routingKey: {routingKey}");
+            }
+        }
     }
 }
