@@ -78,5 +78,25 @@ namespace RabbitMQWebApplication.Services
                 _logger.LogInformation($"Sent batch");
             }
         }
+
+        public void SendMessageToExchange(string message)
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.ExchangeDeclare(exchange: "logs", type: ExchangeType.Fanout);
+
+                var body = JsonSerializer.SerializeToUtf8Bytes(new Message { Text = message, Seconds = _random.Next(1, 5) });
+
+                channel.BasicPublish(exchange: "logs",
+                    routingKey: "",
+                    basicProperties: null,
+                    body: body);
+
+                _logger.LogInformation($"Sent: {message}");
+            }
+        }
     }
 }
