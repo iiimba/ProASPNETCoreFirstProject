@@ -46,5 +46,13 @@ namespace RabbitMQWebApplication.Controllers
             
             return Ok();
         }
+
+        [HttpPost("SendToExchangeTopic")]
+        public IActionResult SendMessageToExchangeTopic(RabbitMQTopicMessage message)
+        {
+            _rabbitMQService.SendMessageToExchangeTopic(message.Message, message.RoutingKey);
+
+            return Ok();
+        }
     }
 }

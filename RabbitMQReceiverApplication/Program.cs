@@ -12,9 +12,14 @@ namespace RabbitMQReceiverApplication
 
             //LogsConsumer.StartConsumer();
 
-            DirectLogsExample.StartConsumer(RoutingKey.Error);
-
+            //DirectLogsExample.StartConsumer(RoutingKey.Error);
             //DirectLogsExample.StartConsumer(new RoutingKey[] { RoutingKey.Info, RoutingKey.Warning, RoutingKey.Error });
+
+            //TopicLogsExample.StartConsumer("*.info");
+            //TopicLogsExample.StartConsumer("*.info", "*.error");
+            //TopicLogsExample.StartConsumer("auth.#");
+            //TopicLogsExample.StartConsumer("auth#");
+            //TopicLogsExample.StartConsumer("auth.warning");
 
             Console.ReadLine();
         }

@@ -115,7 +115,27 @@ namespace RabbitMQWebApplication.Services
                     basicProperties: null,
                     body: body);
 
-                _logger.LogInformation($"Sent: {message}, routingKey: {routingKey}");
+                _logger.LogInformation($"Sent: {message}, routingKey(severity): {routingKey}");
+            }
+        }
+
+        public void SendMessageToExchangeTopic(string message, string routingKey)
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.ExchangeDeclare(exchange: "topic_logs", type: ExchangeType.Topic);
+
+                var body = JsonSerializer.SerializeToUtf8Bytes(new RabbitMQTopicMessage { Message = message, RoutingKey = routingKey });
+
+                channel.BasicPublish(exchange: "topic_logs",
+                    routingKey: routingKey,
+                    basicProperties: null,
+                    body: body);
+
+                _logger.LogInformation($"Sent: {message}, routingKey = {routingKey}");
             }
         }
     }
