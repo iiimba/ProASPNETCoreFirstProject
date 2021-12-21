@@ -21,6 +21,8 @@ namespace RabbitMQReceiverApplication
             //TopicLogsExample.StartConsumer("auth#");
             //TopicLogsExample.StartConsumer("auth.warning");
 
+            RPCConsumer.StartConsumer();
+
             Console.ReadLine();
         }
     }
