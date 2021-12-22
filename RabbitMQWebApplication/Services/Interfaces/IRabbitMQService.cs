@@ -13,5 +13,11 @@ namespace RabbitMQWebApplication.Services.Interfaces
         void SendMessageToExchangeDirect(string message, RoutingKey routingKey);
 
         void SendMessageToExchangeTopic(string message, string routingKey);
+
+        void SendMessageUsingConfirmsFirstStrategy(string message);
+
+        void SendMessageUsingConfirmsSecondBatchStrategy(string message);
+
+        void SendMessageUsingConfirmsThirdAsyncStrategy(string message);
     }
 }

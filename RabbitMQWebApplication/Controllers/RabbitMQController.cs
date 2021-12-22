@@ -15,7 +15,7 @@ namespace RabbitMQWebApplication.Controllers
             _rabbitMQService = rabbitMQService;
         }
 
-        [HttpPost("Send")]
+        [HttpPost("SendMessageToQueue")]
         public IActionResult SendMessageToQueue(RabbitMQMessage message)
         {
             _rabbitMQService.SendMessage(message.Message);
@@ -23,7 +23,7 @@ namespace RabbitMQWebApplication.Controllers
             return Ok();
         }
 
-        [HttpPost("SendBatch")]
+        [HttpPost("SendBatchMessagesToQueue")]
         public IActionResult SendBatchMessagesToQueue(RabbitMQMessageBatch message)
         {
             _rabbitMQService.SendBatchMessages(message.Message, message.Count);
@@ -31,7 +31,7 @@ namespace RabbitMQWebApplication.Controllers
             return Ok();
         }
 
-        [HttpPost("SendToExchange")]
+        [HttpPost("SendMessageToExchange")]
         public IActionResult SendMessageToExchange(RabbitMQMessage message)
         {
             _rabbitMQService.SendMessageToExchange(message.Message);
@@ -39,7 +39,7 @@ namespace RabbitMQWebApplication.Controllers
             return Ok();
         }
 
-        [HttpPost("SendToExchangeDirect")]
+        [HttpPost("SendMessageToExchangeDirect")]
         public IActionResult SendMessageToExchangeDirect(RabbitMQDirectMessage message)
         {
             _rabbitMQService.SendMessageToExchangeDirect(message.Message, message.RoutingKey);
@@ -47,10 +47,34 @@ namespace RabbitMQWebApplication.Controllers
             return Ok();
         }
 
-        [HttpPost("SendToExchangeTopic")]
+        [HttpPost("SendMessageToExchangeTopic")]
         public IActionResult SendMessageToExchangeTopic(RabbitMQTopicMessage message)
         {
             _rabbitMQService.SendMessageToExchangeTopic(message.Message, message.RoutingKey);
+
+            return Ok();
+        }
+
+        [HttpPost("SendMessageUsingConfirmsFirstStrategy")]
+        public IActionResult SendMessageUsingConfirmsFirstStrategy(RabbitMQMessage message)
+        {
+            _rabbitMQService.SendMessageUsingConfirmsFirstStrategy(message.Message);
+
+            return Ok();
+        }
+
+        [HttpPost("SendMessageUsingConfirmsSecondBatchStrategy")]
+        public IActionResult SendMessageUsingConfirmsSecondBatchStrategy(RabbitMQMessage message)
+        {
+            _rabbitMQService.SendMessageUsingConfirmsSecondBatchStrategy(message.Message);
+
+            return Ok();
+        }
+
+        [HttpPost("SendMessageUsingConfirmsThirdAsyncStrategy")]
+        public IActionResult SendMessageUsingConfirmsThirdAsyncStrategy(RabbitMQMessage message)
+        {
+            _rabbitMQService.SendMessageUsingConfirmsThirdAsyncStrategy(message.Message);
 
             return Ok();
         }

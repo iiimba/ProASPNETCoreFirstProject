@@ -3,7 +3,11 @@ using RabbitMQ.Client;
 using RabbitMQWebApplication.Models;
 using RabbitMQWebApplication.Services.Interfaces;
 using System;
+using System.Collections.Concurrent;
+using System.Linq;
+using System.Text;
 using System.Text.Json;
+using System.Threading;
 
 namespace RabbitMQWebApplication.Services
 {
@@ -11,6 +15,7 @@ namespace RabbitMQWebApplication.Services
     {
         private readonly ILogger<RabbitMQService> _logger;
         private readonly Random _random = new Random();
+        private readonly ConcurrentDictionary<ulong, string> _outstandingConfirms = new ConcurrentDictionary<ulong, string>();
 
         public RabbitMQService(ILogger<RabbitMQService> logger)
         {
@@ -35,7 +40,7 @@ namespace RabbitMQWebApplication.Services
 
                 var body = JsonSerializer.SerializeToUtf8Bytes(new Message { Text = message, Seconds = _random.Next(1, 5) });
 
-                channel.BasicPublish(exchange: "", 
+                channel.BasicPublish(exchange: "",
                     routingKey: "task_queue",
                     basicProperties: properties,
                     body: body);
@@ -137,6 +142,140 @@ namespace RabbitMQWebApplication.Services
 
                 _logger.LogInformation($"Sent: {message}, routingKey = {routingKey}");
             }
+        }
+
+        public void SendMessageUsingConfirmsFirstStrategy(string message)
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.ConfirmSelect();
+
+                channel.QueueDeclare(queue: "confirms_queue",
+                    durable: true,
+                    exclusive: false,
+                    autoDelete: false,
+                    arguments: null);
+
+                var properties = channel.CreateBasicProperties();
+                properties.Persistent = true;
+
+                var body = JsonSerializer.SerializeToUtf8Bytes(new Message { Text = message, Seconds = _random.Next(1, 5) });
+
+                channel.BasicPublish(exchange: "",
+                    routingKey: "confirms_queue",
+                    basicProperties: properties,
+                    body: body);
+
+                channel.WaitForConfirmsOrDie(new TimeSpan(0, 0, 5));
+
+                _logger.LogInformation($"Sent: {message}");
+            }
+        }
+
+        public void SendMessageUsingConfirmsSecondBatchStrategy(string message)
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.ConfirmSelect();
+
+                channel.QueueDeclare(queue: "confirms_queue",
+                    durable: true,
+                    exclusive: false,
+                    autoDelete: false,
+                    arguments: null);
+
+                var properties = channel.CreateBasicProperties();
+                properties.Persistent = true;
+
+                var body = JsonSerializer.SerializeToUtf8Bytes(new Message { Text = message, Seconds = _random.Next(1, 5) });
+
+                for (int i = 0; i < 100; i++)
+                {
+                    channel.BasicPublish(exchange: "",
+                        routingKey: "confirms_queue",
+                        basicProperties: properties,
+                        body: body);
+                }
+
+                channel.WaitForConfirmsOrDie(new TimeSpan(0, 0, 5));
+
+                _logger.LogInformation($"Sent: {message}");
+            }
+        }
+
+        public void SendMessageUsingConfirmsThirdAsyncStrategy(string message)
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.ConfirmSelect();
+
+                channel.QueueDeclare(queue: "confirms_queue",
+                    durable: true,
+                    exclusive: false,
+                    autoDelete: false,
+                    arguments: null);
+
+                channel.BasicAcks += (sender, ea) => CleanOutstandingConfirms(ea.DeliveryTag, ea.Multiple);
+
+                channel.BasicNacks += (sender, ea) =>
+                {
+                    _outstandingConfirms.TryGetValue(ea.DeliveryTag, out string body);
+                    _logger.LogError($"Message with body {body} has been nack-ed. Sequence number: {ea.DeliveryTag}, multiple: {ea.Multiple}");
+                    CleanOutstandingConfirms(ea.DeliveryTag, ea.Multiple);
+                };
+
+                _outstandingConfirms.TryAdd(channel.NextPublishSeqNo, message);
+
+                var properties = channel.CreateBasicProperties();
+                properties.Persistent = true;
+
+                channel.BasicPublish(exchange: "",
+                    routingKey: "confirms_queue",
+                    basicProperties: properties,
+                    body: Encoding.UTF8.GetBytes(message));
+
+                if (!WaitUntil(60, () => _outstandingConfirms.IsEmpty))
+                    throw new Exception("All messages could not be confirmed in 60 seconds");
+
+                _logger.LogInformation($"Sent: {message}");
+            }
+        }
+
+        private void CleanOutstandingConfirms(ulong sequenceNumber, bool multiple)
+        {
+            if (multiple)
+            {
+                var confirmed = _outstandingConfirms.Where(k => k.Key <= sequenceNumber);
+                foreach (var entry in confirmed)
+                {
+                    _outstandingConfirms.TryRemove(entry.Key, out _);
+                }
+            }
+            else
+            {
+                _outstandingConfirms.TryRemove(sequenceNumber, out _);
+            }
+        }
+
+        private static bool WaitUntil(int numberOfSeconds, Func<bool> condition)
+        {
+            int waited = 0;
+            while (!condition() && waited < numberOfSeconds * 1000)
+            {
+                Thread.Sleep(100);
+                waited += 100;
+            }
+
+            return condition();
         }
     }
 }
