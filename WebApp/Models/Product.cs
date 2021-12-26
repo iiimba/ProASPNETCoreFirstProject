@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using WebApp.Validation;
@@ -22,10 +23,14 @@ namespace WebApp.Models
         [Range(1, 999999, ErrorMessage = "Please enter a positive price")]
         public decimal Price { get; set; }
 
-        [PrimaryKey(ContextType = typeof(DataContext), DataType = typeof(Category))]
+        //[PrimaryKey(ContextType = typeof(DataContext), DataType = typeof(Category))]
         //[Remote("CategoryKey", "Validation", ErrorMessage = "Enter an existing key")]
-        public long CategoryId { get; set; }
+        public long? CategoryId { get; set; }
 
         public Category Category { get; set; }
+
+        public DateTime DateCreated { get; set; }
+
+        public DateTime DateUpdated { get; set; }
     }
 }

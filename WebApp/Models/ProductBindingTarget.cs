@@ -13,9 +13,6 @@ namespace WebApp.Models
         [Range(1, long.MaxValue)]
         public long CategoryId { get; set; }
 
-        [Range(1, long.MaxValue)]
-        public long SupplierId { get; set; }
-
         public Product ToProduct() => new Product()
         {
             Name = this.Name,
