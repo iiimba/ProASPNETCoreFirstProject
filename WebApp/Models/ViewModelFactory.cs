@@ -14,34 +14,31 @@ namespace WebApp.Models
                 ReadOnly = true,
                 Theme = "info",
                 ShowAction = false,
-                Categories = p == null ? Enumerable.Empty<Category>() : new List<Category> { p.Category },
-                Suppliers = p == null ? Enumerable.Empty<Supplier>() : new List<Supplier> { p.Supplier },
+                Categories = p == null ? Enumerable.Empty<Category>() : new List<Category> { p.Category }
             };
         }
 
-        public static ProductViewModel Create(Product product, IEnumerable<Category> categories, IEnumerable<Supplier> suppliers)
+        public static ProductViewModel Create(Product product, IEnumerable<Category> categories)
+        {
+            return new ProductViewModel
+            {
+                Product = product,
+                Categories = categories
+            };
+        }
+
+        public static ProductViewModel Edit(Product product, IEnumerable<Category> categories)
         {
             return new ProductViewModel
             {
                 Product = product,
                 Categories = categories,
-                Suppliers = suppliers
-            };
-        }
-
-        public static ProductViewModel Edit(Product product, IEnumerable<Category> categories, IEnumerable<Supplier> suppliers)
-        {
-            return new ProductViewModel
-            {
-                Product = product,
-                Categories = categories,
-                Suppliers = suppliers,
                 Theme = "warning",
                 Action = "Edit"
             };
         }
 
-        public static ProductViewModel Delete(Product p, IEnumerable<Category> categories, IEnumerable<Supplier> suppliers)
+        public static ProductViewModel Delete(Product p, IEnumerable<Category> categories)
         {
             return new ProductViewModel
             {
@@ -49,8 +46,7 @@ namespace WebApp.Models
                 Action = "Delete",
                 ReadOnly = true,
                 Theme = "danger",
-                Categories = categories,
-                Suppliers = suppliers
+                Categories = categories
             };
         }
     }

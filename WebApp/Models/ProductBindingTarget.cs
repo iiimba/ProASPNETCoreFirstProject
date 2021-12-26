@@ -20,8 +20,7 @@ namespace WebApp.Models
         {
             Name = this.Name,
             Price = this.Price,
-            CategoryId = this.CategoryId,
-            SupplierId = this.SupplierId
+            CategoryId = this.CategoryId
         };
     }
 }

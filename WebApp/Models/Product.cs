@@ -27,11 +27,5 @@ namespace WebApp.Models
         public long CategoryId { get; set; }
 
         public Category Category { get; set; }
-
-        [PrimaryKey(ContextType = typeof(DataContext), DataType = typeof(Supplier))]
-        //[Remote("SupplierKey", "Validation", ErrorMessage = "Enter an existing key")]
-        public long SupplierId { get; set; }
-
-        public Supplier Supplier { get; set; }
     }
 }

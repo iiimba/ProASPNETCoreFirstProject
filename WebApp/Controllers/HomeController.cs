@@ -11,7 +11,6 @@ namespace WebApp.Controllers
     {
         private DataContext context;
         private IEnumerable<Category> Categories => context.Categories;
-        private IEnumerable<Supplier> Suppliers => context.Suppliers;
 
         public HomeController(DataContext data)
         {
@@ -20,12 +19,12 @@ namespace WebApp.Controllers
 
         public IActionResult Index()
         {
-            return View(context.Products.Include(p => p.Category).Include(p => p.Supplier));
+            return View(context.Products.Include(p => p.Category));
         }
 
         public async Task<IActionResult> Details(long id)
         {
-            var p = await context.Products.Include(p => p.Category).Include(p => p.Supplier).FirstOrDefaultAsync(p => p.ProductId == id);
+            var p = await context.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.ProductId == id);
             var model = ViewModelFactory.Details(p);
 
             return View("ProductEditor", model);
@@ -33,7 +32,7 @@ namespace WebApp.Controllers
 
         public IActionResult Create()
         {
-            return View("ProductEditor", ViewModelFactory.Create(new Product(), Categories, Suppliers));
+            return View("ProductEditor", ViewModelFactory.Create(new Product(), Categories));
         }
 
         [HttpPost]
@@ -43,7 +42,6 @@ namespace WebApp.Controllers
             {
                 product.ProductId = default;
                 product.Category = default;
-                product.Supplier = default;
                 context.Products.Add(product);
 
                 await context.SaveChangesAsync();
@@ -51,13 +49,13 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View("ProductEditor", ViewModelFactory.Create(product, Categories, Suppliers));
+            return View("ProductEditor", ViewModelFactory.Create(product, Categories));
         }
 
         public async Task<IActionResult> Edit(long id)
         {
             var p = await context.Products.FindAsync(id);
-            var model = ViewModelFactory.Edit(p, Categories, Suppliers);
+            var model = ViewModelFactory.Edit(p, Categories);
 
             return View("ProductEditor", model);
         }
@@ -68,7 +66,6 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 product.Category = default;
-                product.Supplier = default;
                 context.Products.Update(product);
 
                 await context.SaveChangesAsync();
@@ -76,12 +73,12 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View("ProductEditor", ViewModelFactory.Edit(product, Categories, Suppliers));
+            return View("ProductEditor", ViewModelFactory.Edit(product, Categories));
         }
 
         public async Task<IActionResult> Delete(long id)
         {
-            var model = ViewModelFactory.Delete(await context.Products.FindAsync(id), Categories, Suppliers);
+            var model = ViewModelFactory.Delete(await context.Products.FindAsync(id), Categories);
 
             return View("ProductEditor", model);
         }

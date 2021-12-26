@@ -16,7 +16,5 @@ namespace WebApp.Models
         public bool ShowAction { get; set; } = true;
 
         public IEnumerable<Category> Categories { get; set; } = Enumerable.Empty<Category>();
-
-        public IEnumerable<Supplier> Suppliers { get; set; } = Enumerable.Empty<Supplier>();
     }
 }
