@@ -19,55 +19,64 @@ namespace WebApp.Models
                     {
                         Name = "Kayak",
                         Price = 275,
-                        Category = c1
+                        Category = c1,
+                        Avaliable = true
                     },
                     new Product
                     {
                         Name = "Lifejacket",
                         Price = 48.95m,
-                        Category = c1
+                        Category = c1,
+                        Avaliable = true
                     },
                     new Product
                     {
                         Name = "Soccer Ball",
                         Price = 19.50m,
-                        Category = c2
+                        Category = c2,
+                        Avaliable = true
                     },
                     new Product
                     {
                         Name = "Corner Flags",
                         Price = 34.95m,
-                        Category = c2
+                        Category = c2,
+                        Avaliable = true
                     },
                     new Product
                     {
                         Name = "Stadium",
                         Price = 79500,
-                        Category = c2
+                        Category = c2,
+                        Avaliable = true
                     },
                     new Product
                     {
                         Name = "Thinking Cap",
                         Price = 16,
-                        Category = c3
+                        Category = c3,
+                        Avaliable = true
                     },
                     new Product
                     {
                         Name = "Unsteady Chair",
                         Price = 29.95m,
-                        Category = c3
+                        Category = c3,
+                        Avaliable = true
                     },
                     new Product
                     {
                         Name = "Human Chess Board",
                         Price = 75,
-                        Category = c3
+                        Category = c3,
+                        Avaliable = true
                     },
                     new Product
                     {
                         Name = "Bling-Bling King",
                         Price = 1200,
-                        Category = c3
+                        Category = c3,
+                        Avaliable = true
                     });
 
                 context.SaveChanges();
