@@ -13,12 +13,11 @@ namespace WebApp.Models
 
         public DbSet<Category> Categories { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Product>().Property(p => p.DateCreated).HasComputedColumnSql("getdate()").ValueGeneratedOnAdd();
-        //    modelBuilder.Entity<Product>().Property(p => p.DateUpdated).HasComputedColumnSql("getdate()").ValueGeneratedOnAddOrUpdate();
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Product>().Property(p => p.DateCreated).HasDefaultValueSql("getdate()");
 
-        //    base.OnModelCreating(modelBuilder);
-        //}
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

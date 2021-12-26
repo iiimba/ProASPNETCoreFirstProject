@@ -14,7 +14,7 @@ namespace WebApp.Models
                 ReadOnly = true,
                 Theme = "info",
                 ShowAction = false,
-                Categories = p == null ? Enumerable.Empty<Category>() : new List<Category> { p.Category }
+                Categories = p == null || p.Category == null ? Enumerable.Empty<Category>() : new List<Category> { p.Category }
             };
         }
 
