@@ -29,6 +29,10 @@ namespace WebApp.Models
 
         public Category Category { get; set; }
 
+        public long? OrderId { get; set; }
+
+        public Order Order { get; set; }
+
         public DateTime DateCreated { get; set; }
 
         public bool Avaliable { get; set; }
