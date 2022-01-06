@@ -30,7 +30,7 @@
         <select asp-for="Product.CategoryId" class="form-control"
                 disabled="@Model.ReadOnly"
                 asp-items="@(new SelectList(Model.Categories, "CategoryId", "Name"))">
-            <option disabled selected></option>
+            <option selected value="">No value</option>
         </select>
     </div>
     <div class="form-group">

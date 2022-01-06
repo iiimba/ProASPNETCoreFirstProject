@@ -7,12 +7,12 @@ using WebApp.Models;
 namespace WebApp.Controllers
 {
     [AutoValidateAntiforgeryToken]
-    public class HomeController : Controller
+    public class ShopController : Controller
     {
         private DataContext context;
         private IEnumerable<Category> Categories => context.Categories;
 
-        public HomeController(DataContext data)
+        public ShopController(DataContext data)
         {
             context = data;
         }
