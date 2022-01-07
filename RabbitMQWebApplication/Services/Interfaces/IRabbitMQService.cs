@@ -19,5 +19,7 @@ namespace RabbitMQWebApplication.Services.Interfaces
         void SendMessageUsingConfirmsSecondBatchStrategy(string message);
 
         void SendMessageUsingConfirmsThirdAsyncStrategy(string message);
+
+        void SendToAlternativeExchange(string message);
     }
 }

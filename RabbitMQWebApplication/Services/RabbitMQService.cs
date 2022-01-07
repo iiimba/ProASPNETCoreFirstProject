@@ -4,6 +4,7 @@ using RabbitMQWebApplication.Models;
 using RabbitMQWebApplication.Services.Interfaces;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -245,6 +246,34 @@ namespace RabbitMQWebApplication.Services
 
                 if (!WaitUntil(60, () => _outstandingConfirms.IsEmpty))
                     throw new Exception("All messages could not be confirmed in 60 seconds");
+
+                _logger.LogInformation($"Sent: {message}");
+            }
+        }
+
+        public void SendToAlternativeExchange(string message)
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                //channel.ExchangeDeclare(exchange: "direct_test_alternative", type: ExchangeType.Direct/*, arguments: new Dictionary<string, object> { { "alternate-exchange", "ae" } }*/);
+                //channel.QueueDeclare(queue: "direct_test_alternative_queue", durable: true, exclusive: false, autoDelete: false, arguments: null);
+                //channel.QueueBind(queue: "direct_test_alternative_queue", exchange: "direct_test_alternative", routingKey: "key1");
+
+                channel.ExchangeDeclare(exchange: "alternative_exchange", type: ExchangeType.Fanout);
+                channel.QueueDeclare(queue: "unrouted", durable: true, exclusive: false, autoDelete: false, arguments: null);
+                channel.QueueBind(queue: "unrouted", exchange: "alternative_exchange", routingKey: "");
+
+                channel.ExchangeDeclare(exchange: "direct_test_alternative2", type: ExchangeType.Direct, arguments: new Dictionary<string, object> { { "alternate-exchange", "alternative_exchange" } });
+                channel.QueueDeclare(queue: "direct_test_alternative_queue2", durable: true, exclusive: false, autoDelete: false, arguments: null);
+                channel.QueueBind(queue: "direct_test_alternative_queue2", exchange: "direct_test_alternative2", routingKey: "key1");
+                
+                channel.BasicPublish(exchange: "direct_test_alternative2",
+                    routingKey: "key2",
+                    basicProperties: null,
+                    body: JsonSerializer.SerializeToUtf8Bytes(message));
 
                 _logger.LogInformation($"Sent: {message}");
             }

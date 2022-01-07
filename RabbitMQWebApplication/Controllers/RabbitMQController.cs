@@ -78,5 +78,13 @@ namespace RabbitMQWebApplication.Controllers
 
             return Ok();
         }
+
+        [HttpPost("SendToAlternativeExchange")]
+        public IActionResult SendToAlternativeExchange(RabbitMQMessage message)
+        {
+            _rabbitMQService.SendToAlternativeExchange(message.Message);
+
+            return Ok();
+        }
     }
 }
